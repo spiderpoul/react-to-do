@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { SortableElement, SortableHandle } from 'react-sortable-hoc';
 import './ToDoItem.less';
 
+@SortableElement
 class ToDoItem extends Component {
   constructor(props) {
     super(props);
@@ -87,4 +88,4 @@ ToDoItem.propTypes = {
   onUnCompleteToDo: PropTypes.func,
 };
 
-export default SortableElement(ToDoItem);
+export default ToDoItem;

@@ -4,6 +4,7 @@ import ToDoItem from './ToDoItem/ToDoItem';
 import './ToDoList.less';
 import { SortableContainer } from 'react-sortable-hoc';
 
+@SortableContainer
 class ToDoList extends Component {
   constructor(props) {
     super(props);
@@ -46,5 +47,5 @@ ToDoList.propTypes = {
   onUnCompleteToDo: PropTypes.func,
 };
 
-export default SortableContainer(ToDoList);
+export default ToDoList;
 
