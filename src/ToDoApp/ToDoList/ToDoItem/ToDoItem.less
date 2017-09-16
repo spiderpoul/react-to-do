@@ -1,0 +1,43 @@
+.todo-item {  
+  @todo-height: 3rem;
+
+  position: relative;
+  height: @todo-height;
+  line-height: @todo-height;
+  padding: 0.3rem;
+  list-style: none;
+  border-bottom: 1px solid #ccc;  
+  vertical-align: middle;
+
+  &__checkbox {
+    display: inline-block;      
+    vertical-align: middle;
+  }
+  &__text {
+    font-size: 1.5rem;
+    padding-left: 1rem;
+    font-family: Arial, Helvetica, sans-serif;  
+    vertical-align: middle;  
+  }
+  &__input {
+    display: inline-block;
+    vertical-align: middle;    
+    font-size: 1.5rem;
+    padding-left: 1rem;
+    font-family: Arial, Helvetica, sans-serif;    
+  }
+  &__delete {
+    display: block;
+    float: right;        
+    width: 2rem;
+    height: 100%;
+    border: none;
+    outline: none;
+    background: none;    
+    cursor: pointer;
+  }  
+
+  &:hover &__delete:after{
+    content: 'x';
+  }
+}

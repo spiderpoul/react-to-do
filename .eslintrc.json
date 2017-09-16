@@ -1,0 +1,20 @@
+{
+    "extends": [
+      "airbnb-base",
+      "plugin:react/recommended"
+    ],
+    "plugins": [
+        "import",
+        "react"
+    ],
+    "rules":{
+        "linebreak-style": "off",
+        "import/prefer-default-export": "off",
+        "class-methods-use-this": "off",
+        "arrow-parens": "off"
+    },
+    "globals": {
+      "window": true,
+      "document": true
+    }  
+}
