@@ -1,5 +1,4 @@
-# react-to-do
-React TO-DO app using MobX with routing.
+# React TO-DO app using MobX with routing.
 
 How to run WebPack dev server:
 ```
