@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { SortableElement, SortableHandle } from 'react-sortable-hoc';
 import './ToDoItem.less';
 
-export default class ToDoItem extends Component {
+class ToDoItem extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -40,12 +41,13 @@ export default class ToDoItem extends Component {
   }
   handleCompletedCheckboxChange({ target }) {
     if (target.checked) {
-      this.props.onCompleteToDo(Object.assign({}, this.props.todo, { completed: 'true' }));
+      this.props.onCompleteToDo(Object.assign({}, this.props.todo, { completed: true }));
     } else {
-      this.props.onUnCompleteToDo(Object.assign({}, this.props.todo, { completed: '' }));
+      this.props.onUnCompleteToDo(Object.assign({}, this.props.todo, { completed: false }));
     }
   }
   render() {
+    const DragHandle = SortableHandle(() => <span className="todo-item__drag-handler">::</span>);
     const editableToDo = () => {
       if (this.state.editing) {
         return <input
@@ -63,6 +65,7 @@ export default class ToDoItem extends Component {
     };
     return (
       <li className="todo-item">
+        <DragHandle />
         <input
           className="todo-item__checkbox"
           type="checkbox"
@@ -84,3 +87,4 @@ ToDoItem.propTypes = {
   onUnCompleteToDo: PropTypes.func,
 };
 
+export default SortableElement(ToDoItem);

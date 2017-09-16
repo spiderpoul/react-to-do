@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { arrayMove } from 'react-sortable-hoc';
 import './ToDoApp.less';
 import ToDoAddNew from './ToDoAddNew/ToDoAddNew';
 import ToDoList from './ToDoList/ToDoList';
@@ -11,21 +12,22 @@ export default class ToDoApp extends Component {
     super(props);
     this.state = {
       todos: [
-        { id: 1, task: 'Learn React', completed: '' },
-        { id: 2, task: 'Read React manual', completed: 'true' },
-        { id: 3, task: 'Create to-do app', completed: '' },
+        { id: 1, task: 'Learn React', completed: false },
+        { id: 2, task: 'Read React manual', completed: true },
+        { id: 3, task: 'Create to-do app', completed: false },
       ],
       activeFilter: 'all',
     };
-    this.addToDo = this.addToDo.bind(this);
-    this.completeToDo = this.completeToDo.bind(this);
-    this.unCompleteToDo = this.unCompleteToDo.bind(this);
-    this.removeToDo = this.removeToDo.bind(this);
-    this.editLabelToDo = this.editLabelToDo.bind(this);
-    this.clearCompleted = this.clearCompleted.bind(this);
-    this.setToDoFilter = this.setToDoFilter.bind(this);
+    this.onAddToDo = this.onAddToDo.bind(this);
+    this.onCompleteToDo = this.onCompleteToDo.bind(this);
+    this.onUnCompleteToDo = this.onUnCompleteToDo.bind(this);
+    this.onRemoveToDo = this.onRemoveToDo.bind(this);
+    this.onEditLabelToDo = this.onEditLabelToDo.bind(this);
+    this.onClearCompleted = this.onClearCompleted.bind(this);
+    this.onSetToDoFilter = this.onSetToDoFilter.bind(this);
+    this.onSortEnd = this.onSortEnd.bind(this);
   }
-  addToDo(task) {
+  onAddToDo(task) {
     this.setState((prevState) => {
       let lastId = 0;
       if (prevState.todos.length > 0) {
@@ -36,60 +38,67 @@ export default class ToDoApp extends Component {
       };
     });
   }
-  editLabelToDo(todo) {
+  onEditLabelToDo(todo) {
     this.setState((prevState) => ({
       todos: prevState.todos.map(
         item => (item.id === todo.id ? Object.assign({}, item, { task: todo.task }) : item),
       ),
     }));
   }
-  completeToDo(todo) {
+  onCompleteToDo(todo) {
     this.setState((prevState) => ({
       todos: prevState.todos.map(
         item => (item.id === todo.id ? Object.assign({}, item, { completed: true }) : item),
       ),
     }));
   }
-  unCompleteToDo(todo) {
+  onUnCompleteToDo(todo) {
     this.setState((prevState) => ({
       todos: prevState.todos.map(
-        item => (item.id === todo.id ? Object.assign({}, item, { completed: '' }) : item),
+        item => (item.id === todo.id ? Object.assign({}, item, { completed: false }) : item),
       ),
     }));
   }
-  removeToDo(todo) {
+  onRemoveToDo(todo) {
     this.setState((prevState) => ({
       todos: prevState.todos.filter(({ id }) => id !== todo.id),
     }));
   }
-  setToDoFilter(filter) {
+  onSetToDoFilter(filter) {
     this.setState({
       activeFilter: filter,
     });
   }
-  clearCompleted() {
+  onClearCompleted() {
     this.setState((prevState) => ({
-      todos: prevState.todos.filter(({ completed }) => completed === ''),
+      todos: prevState.todos.filter(({ completed }) => completed === false),
+    }));
+  }
+  onSortEnd({ oldIndex, newIndex }) {
+    this.setState((prevState) => ({
+      todos: arrayMove(prevState.todos, oldIndex, newIndex),
     }));
   }
   render() {
     return (
       <section className="todo-app page__todo-app">
         <h1 className="todo-app__title">TO-DO App</h1>
-        <ToDoAddNew onToDoAdd={this.addToDo} />
+        <ToDoAddNew onToDoAdd={this.onAddToDo} />
         <ToDoList
           todos={this.state.todos}
           activeFilter={this.state.activeFilter}
-          onEditToDo={this.editLabelToDo}
-          onCompleteToDo={this.completeToDo}
-          onUnCompleteToDo={this.unCompleteToDo}
-          onRemoveToDo={this.removeToDo}
+          onEditToDo={this.onEditLabelToDo}
+          onCompleteToDo={this.onCompleteToDo}
+          onUnCompleteToDo={this.onUnCompleteToDo}
+          onRemoveToDo={this.onRemoveToDo}
+          onSortEnd={this.onSortEnd}
+          useDragHandle={true}
         />
         <ToDoInfo
           todos={this.state.todos}
           activeFilter={this.state.activeFilter}
-          onClearCompleted={this.clearCompleted}
-          onFilterChange={this.setToDoFilter}
+          onClearCompleted={this.onClearCompleted}
+          onFilterChange={this.onSetToDoFilter}
         />
       </section>
     );

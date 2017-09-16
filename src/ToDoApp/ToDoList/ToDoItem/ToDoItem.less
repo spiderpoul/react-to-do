@@ -35,7 +35,21 @@
     outline: none;
     background: none;    
     cursor: pointer;
-  }  
+  } 
+  
+  &__drag-handler {
+    font-size: 1.5rem;
+    font-weight: bold;
+    width: 1.5rem;    
+    display: inline-block;
+    text-align: center;
+    vertical-align: middle;
+    vertical-align: baseline;
+
+    &:hover {
+      cursor: move;
+    }
+  }
 
   &:hover &__delete:after{
     content: 'x';

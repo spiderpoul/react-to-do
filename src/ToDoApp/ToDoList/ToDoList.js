@@ -2,37 +2,23 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import ToDoItem from './ToDoItem/ToDoItem';
 import './ToDoList.less';
+import { SortableContainer } from 'react-sortable-hoc';
 
-export default class ToDoList extends Component {
+class ToDoList extends Component {
   constructor(props) {
     super(props);
-    this.handleRemoveToDo = this.handleRemoveToDo.bind(this);
-    this.handleEditToDo = this.handleEditToDo.bind(this);
-    this.handleCompleteToDo = this.handleCompleteToDo.bind(this);
-    this.handleUnCompleteToDo = this.handleUnCompleteToDo.bind(this);
-  }
-  handleRemoveToDo(todo) {
-    this.props.onRemoveToDo(todo);
-  }
-  handleEditToDo(todo) {
-    this.props.onEditToDo(todo);
-  }
-  handleCompleteToDo(todo) {
-    this.props.onCompleteToDo(todo);
-  }
-  handleUnCompleteToDo(todo) {
-    this.props.onUnCompleteToDo(todo);
   }
   render() {
     let toDoItems;
-    const toDoItem = (todo) =>
+    const toDoItem = (todo, index) =>
       (<ToDoItem
+        index={index}
         key={todo.id}
         todo={todo}
-        onRemoveToDo={this.handleRemoveToDo}
-        onEditToDo={this.handleEditToDo}
-        onCompleteToDo={this.handleCompleteToDo}
-        onUnCompleteToDo={this.handleUnCompleteToDo}
+        onRemoveToDo={this.props.onRemoveToDo}
+        onEditToDo={this.props.onEditToDo}
+        onCompleteToDo={this.props.onCompleteToDo}
+        onUnCompleteToDo={this.props.onUnCompleteToDo}
       />);
     if (this.props.activeFilter === 'all') {
       toDoItems = this.props.todos.map(toDoItem);
@@ -59,4 +45,6 @@ ToDoList.propTypes = {
   onCompleteToDo: PropTypes.func,
   onUnCompleteToDo: PropTypes.func,
 };
+
+export default SortableContainer(ToDoList);
 
