@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { SortableElement, SortableHandle } from 'react-sortable-hoc';
+import classNames from 'classnames';
 import './ToDoItem.less';
 
 @SortableElement
@@ -41,15 +42,15 @@ class ToDoItem extends Component {
     this.props.onRemoveToDo(this.props.todo);
   }
   handleCompletedCheckboxChange({ target }) {
-    if (target.checked) {
-      this.props.onCompleteToDo(Object.assign({}, this.props.todo, { completed: true }));
-    } else {
-      this.props.onUnCompleteToDo(Object.assign({}, this.props.todo, { completed: false }));
-    }
+    this.props.onToggleCompleted(this.props.todo);
   }
   render() {
-    const DragHandle = SortableHandle(() => <span className="todo-item__drag-handler">::</span>);
+    const DragHandle = SortableHandle(() => <span className="todo-item__drag-handler">::</span>);    
     const editableToDo = () => {
+      const todoItemTextClass = classNames({
+        'todo-item__text': true,
+        'todo-item__text--completed': this.props.todo.completed,
+      });
       if (this.state.editing) {
         return <input
           className="todo-item__input"
@@ -61,7 +62,7 @@ class ToDoItem extends Component {
           autoFocus />;
       }
       return <span
-        className="todo-item__text"
+        className={todoItemTextClass}
         onClick={this.handleToDoClicked}>{this.props.todo.task}</span>;
     };
     return (

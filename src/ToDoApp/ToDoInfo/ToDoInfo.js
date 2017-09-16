@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import classNames from 'classnames';
 import './ToDoInfo.less';
 
 export default class ToDoInfo extends Component {
@@ -17,21 +18,33 @@ export default class ToDoInfo extends Component {
   render() {
     const leftTasksCount = this.props.todos.filter(({ completed }) => !completed).length;
     const haveCompleted = this.props.todos.some(({ completed }) => completed);
-    const filterBtn = (filterName) => (<button
-      className={(this.props.activeFilter === filterName) ? ' todo-info__filter-btn todo-info__filter-btn--active' : 'todo-info__filter-btn'}
-      name={filterName}
-      onClick={this.handleClickFilter}>{filterName}</button>);
-
+    const filterBtn = (filterName) => {
+      const filterBtnClass = classNames({
+        'todo-info__filter-btn': true,
+        'todo-info__filter-btn--active': this.props.activeFilter === filterName,
+      });
+      return (
+        <button
+          className={filterBtnClass}
+          name={filterName}
+          onClick={this.handleClickFilter}>{filterName}
+        </button>
+      );
+    };
+    const btnClearClass = classNames({
+      'todo-info__clear': true,
+      'todo-info__clear--deactive': !haveCompleted,
+    });
     return (
       <footer className="todo-info">
         <div className="todo-info__items-left">{leftTasksCount} item{leftTasksCount > 1 ? 's' : ''} left</div>
         {filterBtn('all')}
         {filterBtn('active')}
         {filterBtn('completed')}
-        {haveCompleted &&
-          <button className="todo-info__clear"
-            onClick={this.handleClearCompleted}>Clear completed</button>
-        }
+        <button 
+          className={btnClearClass}
+          onClick={this.handleClearCompleted}>Clear completed
+        </button>
       </footer>
     );
   }

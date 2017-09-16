@@ -1,26 +1,18 @@
 import React, { Component } from 'react';
+import { observer } from 'mobx-react';
 import PropTypes from 'prop-types';
 import { arrayMove } from 'react-sortable-hoc';
-import './ToDoApp.less';
 import ToDoAddNew from './ToDoAddNew/ToDoAddNew';
 import ToDoList from './ToDoList/ToDoList';
 import ToDoInfo from './ToDoInfo/ToDoInfo';
+import './ToDoApp.less';
 
-
-export default class ToDoApp extends Component {
+@observer
+class ToDoApp extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-      todos: [
-        { id: 1, task: 'Learn React', completed: false },
-        { id: 2, task: 'Read React manual', completed: true },
-        { id: 3, task: 'Create to-do app', completed: false },
-      ],
-      activeFilter: 'all',
-    };
     this.onAddToDo = this.onAddToDo.bind(this);
-    this.onCompleteToDo = this.onCompleteToDo.bind(this);
-    this.onUnCompleteToDo = this.onUnCompleteToDo.bind(this);
+    this.onToggleCompleted = this.onToggleCompleted.bind(this);    
     this.onRemoveToDo = this.onRemoveToDo.bind(this);
     this.onEditLabelToDo = this.onEditLabelToDo.bind(this);
     this.onClearCompleted = this.onClearCompleted.bind(this);
@@ -28,75 +20,43 @@ export default class ToDoApp extends Component {
     this.onSortEnd = this.onSortEnd.bind(this);
   }
   onAddToDo(task) {
-    this.setState((prevState) => {
-      let lastId = 0;
-      if (prevState.todos.length > 0) {
-        lastId = Math.max(...prevState.todos.map(todo => todo.id));
-      }
-      return {
-        todos: [{ task, id: lastId + 1 }, ...prevState.todos],
-      };
-    });
+    this.props.store.addToDo(task);
   }
   onEditLabelToDo(todo) {
-    this.setState((prevState) => ({
-      todos: prevState.todos.map(
-        item => (item.id === todo.id ? Object.assign({}, item, { task: todo.task }) : item),
-      ),
-    }));
+    this.props.store.editLabelTodo(todo);
   }
-  onCompleteToDo(todo) {
-    this.setState((prevState) => ({
-      todos: prevState.todos.map(
-        item => (item.id === todo.id ? Object.assign({}, item, { completed: true }) : item),
-      ),
-    }));
-  }
-  onUnCompleteToDo(todo) {
-    this.setState((prevState) => ({
-      todos: prevState.todos.map(
-        item => (item.id === todo.id ? Object.assign({}, item, { completed: false }) : item),
-      ),
-    }));
+  onToggleCompleted(todo) {
+    this.props.store.toogleCompleted(todo);
   }
   onRemoveToDo(todo) {
-    this.setState((prevState) => ({
-      todos: prevState.todos.filter(({ id }) => id !== todo.id),
-    }));
+    this.props.store.removeTodo(todo);
   }
   onSetToDoFilter(filter) {
-    this.setState({
-      activeFilter: filter,
-    });
+    this.props.store.setActiveFilter(filter);
   }
   onClearCompleted() {
-    this.setState((prevState) => ({
-      todos: prevState.todos.filter(({ completed }) => completed === false),
-    }));
+    this.props.store.clearCompleted();
   }
   onSortEnd({ oldIndex, newIndex }) {
-    this.setState((prevState) => ({
-      todos: arrayMove(prevState.todos, oldIndex, newIndex),
-    }));
+    this.props.store.setTodos(arrayMove(this.props.store.todos, oldIndex, newIndex));
   }
   render() {
+    const { activeFilter, filteredTodos, todos } = this.props.store;
     return (
       <section className="todo-app page__todo-app">
         <h1 className="todo-app__title">TO-DO App</h1>
         <ToDoAddNew onToDoAdd={this.onAddToDo} />
         <ToDoList
-          todos={this.state.todos}
-          activeFilter={this.state.activeFilter}
+          todos={filteredTodos.slice()}
           onEditToDo={this.onEditLabelToDo}
-          onCompleteToDo={this.onCompleteToDo}
-          onUnCompleteToDo={this.onUnCompleteToDo}
+          onToggleCompleted={this.onToggleCompleted}          
           onRemoveToDo={this.onRemoveToDo}
           onSortEnd={this.onSortEnd}
           useDragHandle={true}
         />
         <ToDoInfo
-          todos={this.state.todos}
-          activeFilter={this.state.activeFilter}
+          todos={todos.slice()}
+          activeFilter={activeFilter}
           onClearCompleted={this.onClearCompleted}
           onFilterChange={this.onSetToDoFilter}
         />
@@ -106,5 +66,7 @@ export default class ToDoApp extends Component {
 }
 
 ToDoApp.propTypes = {
-  todos: PropTypes.array,
+  store: PropTypes.object,
 };
+
+export default ToDoApp;

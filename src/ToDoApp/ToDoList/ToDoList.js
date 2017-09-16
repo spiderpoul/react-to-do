@@ -1,16 +1,15 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import ToDoItem from './ToDoItem/ToDoItem';
-import './ToDoList.less';
 import { SortableContainer } from 'react-sortable-hoc';
+import './ToDoList.less';
 
 @SortableContainer
 class ToDoList extends Component {
   constructor(props) {
     super(props);
   }
-  render() {
-    let toDoItems;
+  render() {    
     const toDoItem = (todo, index) =>
       (<ToDoItem
         index={index}
@@ -18,18 +17,9 @@ class ToDoList extends Component {
         todo={todo}
         onRemoveToDo={this.props.onRemoveToDo}
         onEditToDo={this.props.onEditToDo}
-        onCompleteToDo={this.props.onCompleteToDo}
-        onUnCompleteToDo={this.props.onUnCompleteToDo}
+        onToggleCompleted={this.props.onToggleCompleted}      
       />);
-    if (this.props.activeFilter === 'all') {
-      toDoItems = this.props.todos.map(toDoItem);
-    }
-    if (this.props.activeFilter === 'completed') {
-      toDoItems = this.props.todos.filter(todo => todo.completed).map(toDoItem);
-    }
-    if (this.props.activeFilter === 'active') {
-      toDoItems = this.props.todos.filter(todo => !todo.completed).map(toDoItem);
-    }
+    const toDoItems = this.props.todos.map(toDoItem);
     return (
       <ul className="todo-list">
         {toDoItems}
