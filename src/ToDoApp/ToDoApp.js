@@ -1,72 +1,42 @@
 import React, { Component } from 'react';
-import { observer } from 'mobx-react';
-import PropTypes from 'prop-types';
-import { arrayMove } from 'react-sortable-hoc';
-import ToDoAddNew from './ToDoAddNew/ToDoAddNew';
-import ToDoList from './ToDoList/ToDoList';
-import ToDoInfo from './ToDoInfo/ToDoInfo';
+import { HashRouter as Router, Route, Redirect, Switch } from 'react-router-dom';
+import ToDoMain from './ToDoMain/ToDoMain';
+import ToDoSideBar from './ToDoSideBar/ToDoSideBar';
+import todoStore from './ToDoStore';
 import './ToDoApp.less';
 
-@observer
 class ToDoApp extends Component {
-  constructor(props) {
-    super(props);
-    this.onAddToDo = this.onAddToDo.bind(this);
-    this.onToggleCompleted = this.onToggleCompleted.bind(this);    
-    this.onRemoveToDo = this.onRemoveToDo.bind(this);
-    this.onEditLabelToDo = this.onEditLabelToDo.bind(this);
-    this.onClearCompleted = this.onClearCompleted.bind(this);
-    this.onSetToDoFilter = this.onSetToDoFilter.bind(this);
-    this.onSortEnd = this.onSortEnd.bind(this);
+  constructor() {
+    super();
+    this.todosLists = todoStore.todosLists;
+    this.onAddList = this.onAddList.bind(this);
   }
-  onAddToDo(task) {
-    this.props.store.addToDo(task);
-  }
-  onEditLabelToDo(todo) {
-    this.props.store.editLabelTodo(todo);
-  }
-  onToggleCompleted(todo) {
-    this.props.store.toogleCompleted(todo);
-  }
-  onRemoveToDo(todo) {
-    this.props.store.removeTodo(todo);
-  }
-  onSetToDoFilter(filter) {
-    this.props.store.setActiveFilter(filter);
-  }
-  onClearCompleted() {
-    this.props.store.clearCompleted();
-  }
-  onSortEnd({ oldIndex, newIndex }) {
-    this.props.store.setTodos(arrayMove(this.props.store.todos, oldIndex, newIndex));
+  onAddList(description) {
+    todoStore.addTodosList(description);
   }
   render() {
-    const { activeFilter, filteredTodos, todos } = this.props.store;
+    this.lists = todoStore.todosLists;
+    this.defaultUrl = `/lists/${this.lists[0].id}`;
+    this.ActiveToDo = ({ match }) => {
+      const selectedList = this.lists.find(list => list.id.toString() === match.params.listId);
+      return (
+        selectedList ? <ToDoMain store={selectedList.todos} /> : <h2>List not found</h2>
+      );
+    };
     return (
-      <section className="todo-app page__todo-app">
-        <h1 className="todo-app__title">TO-DO App</h1>
-        <ToDoAddNew onToDoAdd={this.onAddToDo} />
-        <ToDoList
-          todos={filteredTodos.slice()}
-          onEditToDo={this.onEditLabelToDo}
-          onToggleCompleted={this.onToggleCompleted}          
-          onRemoveToDo={this.onRemoveToDo}
-          onSortEnd={this.onSortEnd}
-          useDragHandle={true}
-        />
-        <ToDoInfo
-          todos={todos.slice()}
-          activeFilter={activeFilter}
-          onClearCompleted={this.onClearCompleted}
-          onFilterChange={this.onSetToDoFilter}
-        />
-      </section>
+      <Router>
+        <section className="todo-app page__todo-app">
+          <ToDoSideBar lists={this.lists} onAddList={this.onAddList} />
+          <Switch>
+            <Route path="/lists/:listId" component={this.ActiveToDo} />
+            <Route render={() => (
+              <Redirect to={this.defaultUrl} />
+            )} />
+          </Switch>
+        </section>
+      </Router>
     );
   }
 }
-
-ToDoApp.propTypes = {
-  store: PropTypes.object,
-};
 
 export default ToDoApp;

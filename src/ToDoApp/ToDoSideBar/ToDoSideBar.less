@@ -1,0 +1,53 @@
+.todo-aside {  
+  width: 15rem;
+  margin-top: 5rem;
+  box-shadow: 0 0.5rem 2rem rgba(0,0,0,0.3);  
+  background-color: #fff;  
+
+  @media (max-width: 768px) {    
+    min-width: 10rem;
+  } 
+  &__link {
+    display: inline-block;
+    width: 100%;
+    height: 100%;
+    text-decoration: none;
+    color: black;
+    padding: 0.5rem 0 0.5rem 0.7rem;
+    box-sizing: border-box;
+    &:hover {
+      background-color: #ccc;
+    }
+    &--active {
+      background-color: cornflowerblue;
+      color: white;
+      &:hover {
+        background-color: cornflowerblue;
+      }
+    }
+  }  
+  &__lists {
+    list-style: none;     
+    margin: 0;
+    padding-left: 0;
+  }
+  &__item {
+    font-size: 1.5rem;      
+    font-family: Arial, Helvetica, sans-serif;  
+    vertical-align: middle;    
+  }
+  &__input {
+    box-sizing: border-box;
+    width: 100%;  
+    outline: none;
+    font-size: 1.5rem;
+    border: none;    
+    box-shadow: inset 0 2px 1px rgba(0,0,0,0.1);    
+    border-bottom: 2px solid cornflowerblue;
+    padding: 1rem 0rem 1rem 1rem;   
+    
+    &:focus {
+      box-shadow: inset 0 -2px 1px rgba(100, 149, 237,0.2), inset 0 2px 1px rgba(0,0,0,0.1);; 
+    }
+  }
+}

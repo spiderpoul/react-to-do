@@ -5,23 +5,15 @@ class ToDo {
   @observable task;
   @observable completed;
 
-  constructor(task) {
-    this.id = Date.now();
+  constructor(id, task) {
+    this.id = id;
     this.task = task;
     this.completed = false;
   }
 }
 
-class ToDoStore {
-  @observable todos = [
-    { id: 1, task: 'Learn React', completed: false },
-    { id: 2, task: 'Read React manual', completed: true },
-    { id: 3, task: 'Watch some videos about React', completed: false },
-    { id: 4, task: 'Try to use Router in React', completed: false },
-    { id: 5, task: 'Read about MobX', completed: false },
-    { id: 6, task: 'Understand Flux', completed: false },
-    { id: 7, task: 'Read smth about Redux', completed: false },
-  ];
+class ToDoList {
+  @observable todos = [];
   @observable activeFilter = 'all';
 
   @computed get filteredTodos() {
@@ -39,10 +31,15 @@ class ToDoStore {
   }
 
   @action addToDo = (task) => {
-    this.todos.push(new ToDo(task));
+    let lastId = 0;
+    const todosId = this.todos.map(todo => todo.id);
+    if (this.todos.length > 0) {
+      lastId = Math.max(...todosId.slice()) + 1;
+    }
+    this.todos.push(new ToDo(lastId, task));
   }
 
-  @action toogleCompleted = (todo) => {    
+  @action toogleCompleted = (todo) => {
     const editedTodos = this.todos.map(
       item => (item.id === todo.id ? Object.assign({}, item, { completed: !todo.completed }) : item),
     );
@@ -69,4 +66,36 @@ class ToDoStore {
   }
 }
 
-export default new ToDoStore();
+
+class TodosStore {
+  @observable todosLists = [];
+  
+  @action addTodosList = (description) => {
+    this.todosLists.push({
+      id: this.todosLists.length,
+      description,
+      todos: new ToDoList(),
+    });
+  }
+
+  constructor() {
+    this.addTodosList('Work todos');
+    this.addTodosList('Home todos');
+
+    this.todosLists[0].todos.addToDo('Learn React');
+    this.todosLists[0].todos.addToDo('Read React manual');
+    this.todosLists[0].todos.addToDo('Watch some videos about React');
+    this.todosLists[0].todos.addToDo('Try to use Router in React');
+    this.todosLists[0].todos.addToDo('Read about MobX');
+    this.todosLists[0].todos.addToDo('Understand Flux');
+    this.todosLists[0].todos.addToDo('Read something about Redux');
+
+    this.todosLists[1].todos.addToDo('Buy milk');
+    this.todosLists[1].todos.addToDo('Clean house');
+    this.todosLists[1].todos.addToDo('Watch TV');
+    this.todosLists[1].todos.addToDo('Feed the cat');    
+  }
+}
+
+
+export default new TodosStore(); 
