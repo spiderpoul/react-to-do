@@ -45,8 +45,7 @@
   "scripts": {
     "test": "test",
     "start": "webpack-dev-server --open --config webpack.dev.js",
-    "build": "webpack --config webpack.prod.js",
-    "json-server": "json-server --watch db.json --port 3004 --static ./build"
+    "build": "webpack --config webpack.prod.js"
   },
   "repository": {
     "type": "git",
