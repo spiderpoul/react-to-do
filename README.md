@@ -1,6 +1,7 @@
 # React TO-DO app using MobX with routing
 
 This is a simple sortable ToDo app on React.
+![How it looks](/todosApp.jpg)
 
 Here some features:
 * Add, delete, edit, complete new todos.
