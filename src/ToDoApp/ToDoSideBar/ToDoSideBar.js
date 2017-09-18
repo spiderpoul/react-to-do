@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { NavLink } from 'react-router-dom';
+import { NavLink, withRouter } from 'react-router-dom';
 import './ToDoSideBar.less';
 
+@withRouter
 class ToDoSideBar extends Component {
   constructor(props) {
     super(props);
@@ -23,7 +24,8 @@ class ToDoSideBar extends Component {
       this.setState({
         newListName: '',
       });
-    }
+      this.props.history.push(`/lists/${this.props.lists.length-1}`);
+    }        
   }
   render() {
     const { lists } = this.props;

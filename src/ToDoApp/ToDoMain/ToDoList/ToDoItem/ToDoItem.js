@@ -4,6 +4,8 @@ import { SortableElement, SortableHandle } from 'react-sortable-hoc';
 import classNames from 'classnames';
 import './ToDoItem.less';
 
+const DragHandle = SortableHandle(() => <span className="todo-item__drag-handler">::</span>);    
+
 @SortableElement
 class ToDoItem extends Component {
   constructor(props) {
@@ -16,7 +18,7 @@ class ToDoItem extends Component {
     this.handleKeyPressed = this.handleKeyPressed.bind(this);
     this.handleRemoveToDo = this.handleRemoveToDo.bind(this);
     this.handleTextInputChanged = this.handleTextInputChanged.bind(this);
-    this.handleCompletedCheckboxChange = this.handleCompletedCheckboxChange.bind(this);
+    this.handleCompletedCheckboxChange = this.handleCompletedCheckboxChange.bind(this);    
   }
   handleToDoClicked() {
     this.setState({
@@ -45,7 +47,7 @@ class ToDoItem extends Component {
     this.props.onToggleCompleted(this.props.todo);
   }
   render() {
-    const DragHandle = SortableHandle(() => <span className="todo-item__drag-handler">::</span>);    
+    
     const editableToDo = () => {
       const todoItemTextClass = classNames({
         'todo-item__text': true,
