@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import ToDoItem from './ToDoItem/ToDoItem';
+import { CSSTransitionGroup } from 'react-transition-group';
 import { SortableContainer } from 'react-sortable-hoc';
+import ToDoItem from './ToDoItem/ToDoItem';
 import './ToDoList.less';
 
 @SortableContainer
@@ -9,7 +10,7 @@ class ToDoList extends Component {
   constructor(props) {
     super(props);
   }
-  render() {    
+  render() {
     const toDoItem = (todo, index) =>
       (<ToDoItem
         index={index}
@@ -17,12 +18,17 @@ class ToDoList extends Component {
         todo={todo}
         onRemoveToDo={this.props.onRemoveToDo}
         onEditToDo={this.props.onEditToDo}
-        onToggleCompleted={this.props.onToggleCompleted}      
+        onToggleCompleted={this.props.onToggleCompleted}
       />);
     const toDoItems = this.props.todos.map(toDoItem);
     return (
       <ul className="todo-list">
-        {toDoItems}
+        <CSSTransitionGroup
+          transitionName="todo-list"
+          transitionEnterTimeout={500}
+          transitionLeaveTimeout={300}>
+          {toDoItems}
+        </CSSTransitionGroup>
       </ul>
     );
   }

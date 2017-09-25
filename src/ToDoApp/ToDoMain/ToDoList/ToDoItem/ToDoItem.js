@@ -4,7 +4,7 @@ import { SortableElement, SortableHandle } from 'react-sortable-hoc';
 import classNames from 'classnames';
 import './ToDoItem.less';
 
-const DragHandle = SortableHandle(() => <span className="todo-item__drag-handler">::</span>);    
+const DragHandle = SortableHandle(() => <span className="todo-item__drag-handler">::</span>);
 
 @SortableElement
 class ToDoItem extends Component {

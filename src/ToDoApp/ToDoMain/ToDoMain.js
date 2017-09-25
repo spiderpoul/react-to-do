@@ -12,7 +12,7 @@ class ToDoMain extends Component {
   constructor(props) {
     super(props);
     this.onAddToDo = this.onAddToDo.bind(this);
-    this.onToggleCompleted = this.onToggleCompleted.bind(this);    
+    this.onToggleCompleted = this.onToggleCompleted.bind(this);
     this.onRemoveToDo = this.onRemoveToDo.bind(this);
     this.onEditLabelToDo = this.onEditLabelToDo.bind(this);
     this.onClearCompleted = this.onClearCompleted.bind(this);
@@ -43,24 +43,24 @@ class ToDoMain extends Component {
   render() {
     const { activeFilter, filteredTodos, todos } = this.props.store;
     return (
-      <main className="todo-main">
-        <h1 className="todo-main__title">TO-DO App</h1>
-        <ToDoAddNew onToDoAdd={this.onAddToDo} />
-        <ToDoList
-          todos={filteredTodos.slice()}
-          onEditToDo={this.onEditLabelToDo}
-          onToggleCompleted={this.onToggleCompleted}          
-          onRemoveToDo={this.onRemoveToDo}
-          onSortEnd={this.onSortEnd}
-          useDragHandle={true}
-        />
-        <ToDoInfo
-          todos={todos.slice()}
-          activeFilter={activeFilter}
-          onClearCompleted={this.onClearCompleted}
-          onFilterChange={this.onSetToDoFilter}
-        />
-      </main>
+        <main className="todo-main">
+          <h1 className="todo-main__title">TO-DO App</h1>
+          <ToDoAddNew onToDoAdd={this.onAddToDo} />
+          <ToDoList
+            todos={filteredTodos.slice()}
+            onEditToDo={this.onEditLabelToDo}
+            onToggleCompleted={this.onToggleCompleted}
+            onRemoveToDo={this.onRemoveToDo}
+            onSortEnd={this.onSortEnd}
+            useDragHandle={true}
+          />
+          <ToDoInfo
+            todos={todos.slice()}
+            activeFilter={activeFilter}
+            onClearCompleted={this.onClearCompleted}
+            onFilterChange={this.onSetToDoFilter}
+          />
+        </main>      
     );
   }
 }
