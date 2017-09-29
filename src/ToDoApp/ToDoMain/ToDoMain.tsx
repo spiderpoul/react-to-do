@@ -1,6 +1,5 @@
-import React, { Component } from 'react';
+import * as React from 'react';
 import { observer } from 'mobx-react';
-import PropTypes from 'prop-types';
 import { arrayMove } from 'react-sortable-hoc';
 import ToDoAddNew from './ToDoAddNew/ToDoAddNew';
 import ToDoList from './ToDoList/ToDoList';
@@ -8,8 +7,8 @@ import ToDoInfo from './ToDoInfo/ToDoInfo';
 import './ToDoMain.less';
 
 @observer
-class ToDoMain extends Component {
-  constructor(props) {
+class ToDoMain extends React.Component<any, any> {
+  constructor(props: {}) {
     super(props);
     this.onAddToDo = this.onAddToDo.bind(this);
     this.onToggleCompleted = this.onToggleCompleted.bind(this);
@@ -19,25 +18,25 @@ class ToDoMain extends Component {
     this.onSetToDoFilter = this.onSetToDoFilter.bind(this);
     this.onSortEnd = this.onSortEnd.bind(this);
   }
-  onAddToDo(task) {
+  onAddToDo(task: any) {
     this.props.store.addToDo(task);
   }
-  onEditLabelToDo(todo) {
+  onEditLabelToDo(todo: any) {
     this.props.store.editLabelTodo(todo);
   }
-  onToggleCompleted(todo) {
+  onToggleCompleted(todo: any) {
     this.props.store.toogleCompleted(todo);
   }
-  onRemoveToDo(todo) {
+  onRemoveToDo(todo: any) {
     this.props.store.removeTodo(todo);
   }
-  onSetToDoFilter(filter) {
+  onSetToDoFilter(filter: any) {
     this.props.store.setActiveFilter(filter);
   }
   onClearCompleted() {
     this.props.store.clearCompleted();
   }
-  onSortEnd({ oldIndex, newIndex }) {
+  onSortEnd({ oldIndex, newIndex }: any) {
     this.props.store.setTodos(arrayMove(this.props.store.todos, oldIndex, newIndex));
   }
   render() {
@@ -64,9 +63,5 @@ class ToDoMain extends Component {
     );
   }
 }
-
-ToDoMain.propTypes = {
-  store: PropTypes.object,
-};
 
 export default ToDoMain;

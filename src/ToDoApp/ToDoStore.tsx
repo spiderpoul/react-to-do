@@ -1,11 +1,11 @@
 import { observable, action, computed } from 'mobx';
 
 class ToDo {
-  @observable id;
-  @observable task;
-  @observable completed;
+  @observable id: number;
+  @observable task: string;
+  @observable completed: boolean;
 
-  constructor(id, task) {
+  constructor(id: number, task: string) {
     this.id = id;
     this.task = task;
     this.completed = false;
@@ -13,7 +13,7 @@ class ToDo {
 }
 
 class ToDoList {
-  @observable todos = [];
+  @observable todos: ToDo[] = [];
   @observable activeFilter = 'all';
 
   @computed get filteredTodos() {
@@ -26,11 +26,11 @@ class ToDoList {
     return this.todos;
   }
 
-  @action setActiveFilter = (filter) => {
+  @action setActiveFilter = (filter: string) => {
     this.activeFilter = filter;
   }
 
-  @action addToDo = (task) => {
+  @action addToDo = (task: string) => {
     let lastId = 0;
     const todosId = this.todos.map(todo => todo.id);
     if (this.todos.length > 0) {
@@ -39,41 +39,48 @@ class ToDoList {
     this.todos.push(new ToDo(lastId, task));
   }
 
-  @action toogleCompleted = (todo) => {
+  @action toogleCompleted = (todo: ToDo) => {
     const editedTodos = this.todos.map(
-      item => (item.id === todo.id ? Object.assign({}, item, { completed: !todo.completed }) : item),
+      item => (item.id === todo.id ? Object.assign({}, item, { completed: !todo.completed })
+        : item),
     );
-    this.todos.replace(editedTodos);
+    //this.todos.replace(editedTodos);
   }
 
-  @action editLabelTodo = (todo) => {
+  @action editLabelTodo = (todo: ToDo) => {
     const editedTodos = this.todos.map(
       item => (item.id === todo.id ? Object.assign({}, item, { task: todo.task }) : item),
     );
-    this.todos.replace(editedTodos);
+    //this.todos.replace(editedTodos);
   }
 
-  @action removeTodo = (todo) => {
+  @action removeTodo = (todo: ToDo) => {
     const editedTodos = this.todos.filter(({ id }) => id !== todo.id);
-    this.todos.replace(editedTodos);
+    //this.todos.replace(editedTodos);
   }
   @action clearCompleted = () => {
     const editedTodos = this.todos.filter(({ completed }) => completed === false);
-    this.todos.replace(editedTodos);
+    //this.todos.replace(editedTodos);
   }
-  @action setTodos = (todos) => {
-    this.todos.replace(todos);
+  @action setTodos = (todos: ToDo[]) => {
+    //this.todos.replace(todos);
   }
 }
 
 
-class TodosStore {
-  @observable todosLists = [];
-  
-  @action addTodosList = (description) => {
+interface ITodosLists {
+  id: number;
+  description: string;
+  todos: ToDoList;
+}
+
+class TodosStore {  
+  @observable todosLists: ITodosLists[]; // = [];
+
+  @action addTodosList = (description: string) => {
     this.todosLists.push({
-      id: this.todosLists.length,
       description,
+      id: this.todosLists.length,
       todos: new ToDoList(),
     });
   }
@@ -93,9 +100,9 @@ class TodosStore {
     this.todosLists[1].todos.addToDo('Buy milk');
     this.todosLists[1].todos.addToDo('Clean house');
     this.todosLists[1].todos.addToDo('Watch TV');
-    this.todosLists[1].todos.addToDo('Feed the cat');    
+    this.todosLists[1].todos.addToDo('Feed the cat');
   }
 }
 
 
-export default new TodosStore(); 
+export default new TodosStore();

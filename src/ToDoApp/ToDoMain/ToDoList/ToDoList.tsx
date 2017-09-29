@@ -1,17 +1,16 @@
-import React, { Component } from 'react';
-import PropTypes from 'prop-types';
-import { CSSTransitionGroup } from 'react-transition-group';
+import * as React from 'react';
+import CSSTransitionGroup from 'react-transition-group';
 import { SortableContainer } from 'react-sortable-hoc';
 import ToDoItem from './ToDoItem/ToDoItem';
 import './ToDoList.less';
 
-@SortableContainer
-class ToDoList extends Component {
-  constructor(props) {
+//@SortableContainer
+class ToDoList extends React.Component<any, any> {
+  constructor(props: any) {
     super(props);
   }
   render() {
-    const toDoItem = (todo, index) =>
+    const toDoItem = (todo: any, index: any) =>
       (<ToDoItem
         index={index}
         key={todo.id}
@@ -26,7 +25,8 @@ class ToDoList extends Component {
         <CSSTransitionGroup
           transitionName="todo-list"
           transitionEnterTimeout={500}
-          transitionLeaveTimeout={300}>
+          transitionLeaveTimeout={300}
+        >
           {toDoItems}
         </CSSTransitionGroup>
       </ul>
@@ -34,14 +34,5 @@ class ToDoList extends Component {
   }
 }
 
-ToDoList.propTypes = {
-  todos: PropTypes.array,
-  activeFilter: PropTypes.string,
-  onRemoveToDo: PropTypes.func,
-  onEditToDo: PropTypes.func,
-  onCompleteToDo: PropTypes.func,
-  onUnCompleteToDo: PropTypes.func,
-};
-
-export default ToDoList;
+export default SortableContainer(ToDoList);
 

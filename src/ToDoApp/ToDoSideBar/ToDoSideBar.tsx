@@ -1,11 +1,10 @@
-import React, { Component } from 'react';
-import PropTypes from 'prop-types';
+import * as React from 'react';
 import { NavLink, withRouter } from 'react-router-dom';
 import './ToDoSideBar.less';
 
 @withRouter
-class ToDoSideBar extends Component {
-  constructor(props) {
+class ToDoSideBar extends React.Component<any, any> {
+  constructor(props: any) {
     super(props);
     this.state = {
       newListName: '',
@@ -13,35 +12,36 @@ class ToDoSideBar extends Component {
     this.handleTextInputChange = this.handleTextInputChange.bind(this);
     this.handleKeyPressed = this.handleKeyPressed.bind(this);
   }
-  handleTextInputChange({ target }) {
+  handleTextInputChange({ target }: any) {
     this.setState({
       newListName: target.value,
     });
   }
-  handleKeyPressed({ key }) {
+  handleKeyPressed({ key }: any) {
     if (key === 'Enter' && this.state.newListName) {
       this.props.onAddList(this.state.newListName);
       this.setState({
         newListName: '',
       });
-      this.props.history.push(`/lists/${this.props.lists.length-1}`);
-    }        
+      this.props.history.push(`/lists/${this.props.lists.length - 1}`);
+    }
   }
   render() {
     const { lists } = this.props;
+    const listsElem = lists.map((list: any) => (
+      <li key={list.id} className="todo-aside__item">
+        <NavLink
+          to={`/lists/${list.id}`}
+          activeClassName='todo-aside__link--active'
+          className="todo-aside__link">
+          {list.description}
+        </NavLink>
+      </li>
+    ));
     return (
       <aside className="todo-aside">
         <ul className="todo-aside__lists">
-          {lists.map(list => (
-            <li key={list.id} className="todo-aside__item">
-              <NavLink
-                to={`/lists/${list.id}`}
-                activeClassName='todo-aside__link--active'
-                className="todo-aside__link">
-                {list.description}
-              </NavLink>
-            </li>
-          ))}
+          {listsElem}
         </ul>
         <input
           className="todo-aside__input"
@@ -55,10 +55,5 @@ class ToDoSideBar extends Component {
     );
   }
 }
-
-ToDoSideBar.propTypes = {
-  lists: PropTypes.object,
-  onAddList: PropTypes.func,
-};
 
 export default ToDoSideBar;

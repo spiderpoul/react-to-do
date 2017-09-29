@@ -5,29 +5,20 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 module.exports = {
   context: path.join(__dirname, '/src'),
   entry: {
-    'index': './index',
+    'index': './index.tsx',
   },
   output: {
     path: path.join(__dirname, '/build'),
     filename: '[name].js',
   },
+  resolve: {
+    // Add '.ts' and '.tsx' as resolvable extensions.
+    extensions: [".ts", ".tsx", ".js", ".json"]
+  },
   module: {
     loaders: [
-      {
-        test: /\.js$/,
-        exclude: /(node_modules|bower_components)/,
-        use: {
-          loader: 'babel-loader',
-          options: {
-            presets: ['es2015', 'react'],
-            plugins: [
-              'transform-decorators-legacy',
-              'transform-class-properties',
-              'transform-object-rest-spread',
-            ],
-          },
-        },
-      },
+      { test: /\.tsx?$/, loader: "awesome-typescript-loader" },
+      { enforce: "pre", test: /\.js$/, loader: "source-map-loader" },
       {
         test: /\.less$/,
         use: [{
@@ -62,7 +53,6 @@ module.exports = {
       },
     ],
   },
-
   plugins: [
     new CleanWebpackPlugin(path.join(__dirname, '/build')),
     new HtmlWebpackPlugin({

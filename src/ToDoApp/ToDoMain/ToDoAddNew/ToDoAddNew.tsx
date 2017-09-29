@@ -1,9 +1,8 @@
-import React, { Component } from 'react';
-import PropTypes from 'prop-types';
+import * as React from 'react';
 import './ToDoAddNew.less';
 
-export default class ToDoAddNew extends Component {
-  constructor(props) {
+export default class ToDoAddNew extends React.Component<any, any> {
+  constructor(props: any) {
     super(props);
     this.state = {
       newToDoLabel: '',
@@ -11,12 +10,12 @@ export default class ToDoAddNew extends Component {
     this.handleTextInputChange = this.handleTextInputChange.bind(this);
     this.handleKeyPressed = this.handleKeyPressed.bind(this);
   }
-  handleTextInputChange({ target }) {
+  handleTextInputChange({ target }: any) {
     this.setState({
       newToDoLabel: target.value,
     });
   }
-  handleKeyPressed({ key }) {
+  handleKeyPressed({ key }: any) {
     if (key === 'Enter' && this.state.newToDoLabel) {
       this.props.onToDoAdd(this.state.newToDoLabel);
       this.setState({
@@ -33,12 +32,9 @@ export default class ToDoAddNew extends Component {
           onChange={this.handleTextInputChange}
           onKeyPress={this.handleKeyPressed}
           type="text"
-          placeholder="Whats needs to be done?" />
+          placeholder="Whats needs to be done?"
+        />
       </div>
     );
   }
 }
-
-ToDoAddNew.propTypes = {
-  onToDoAdd: PropTypes.func,
-};

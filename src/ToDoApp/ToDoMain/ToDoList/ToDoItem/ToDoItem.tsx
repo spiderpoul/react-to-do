@@ -1,14 +1,13 @@
-import React, { Component } from 'react';
-import PropTypes from 'prop-types';
+import * as React from 'react';
 import { SortableElement, SortableHandle } from 'react-sortable-hoc';
 import classNames from 'classnames';
 import './ToDoItem.less';
 
 const DragHandle = SortableHandle(() => <span className="todo-item__drag-handler">::</span>);
 
-@SortableElement
-class ToDoItem extends Component {
-  constructor(props) {
+
+class ToDoItem extends React.Component<any, any> {
+  constructor(props: any) {
     super(props);
     this.state = {
       edit: false,
@@ -18,7 +17,7 @@ class ToDoItem extends Component {
     this.handleKeyPressed = this.handleKeyPressed.bind(this);
     this.handleRemoveToDo = this.handleRemoveToDo.bind(this);
     this.handleTextInputChanged = this.handleTextInputChanged.bind(this);
-    this.handleCompletedCheckboxChange = this.handleCompletedCheckboxChange.bind(this);    
+    this.handleCompletedCheckboxChange = this.handleCompletedCheckboxChange.bind(this);
   }
   handleToDoClicked() {
     this.setState({
@@ -29,13 +28,13 @@ class ToDoItem extends Component {
   handleInputLostFocus() {
     this.setState({ editing: false });
   }
-  handleKeyPressed(event) {
+  handleKeyPressed(event: any) {
     if (event.key === 'Enter') {
       this.handleInputLostFocus();
       this.props.onEditToDo(Object.assign({}, this.props.todo, { task: this.state.editedTask }));
     }
   }
-  handleTextInputChanged({ target }) {
+  handleTextInputChanged({ target }: any) {
     this.setState({
       editedTask: target.value,
     });
@@ -43,29 +42,35 @@ class ToDoItem extends Component {
   handleRemoveToDo() {
     this.props.onRemoveToDo(this.props.todo);
   }
-  handleCompletedCheckboxChange({ target }) {
+  handleCompletedCheckboxChange({ target }: any) {
     this.props.onToggleCompleted(this.props.todo);
   }
   render() {
-    
+
     const editableToDo = () => {
       const todoItemTextClass = classNames({
         'todo-item__text': true,
         'todo-item__text--completed': this.props.todo.completed,
       });
       if (this.state.editing) {
-        return <input
-          className="todo-item__input"
-          type="text"
-          value={this.state.editedTask}
-          onBlur={this.handleInputLostFocus}
-          onKeyPress={this.handleKeyPressed}
-          onChange={this.handleTextInputChanged}
-          autoFocus />;
+        return (
+          <input
+            className="todo-item__input"
+            type="text"
+            value={this.state.editedTask}
+            onBlur={this.handleInputLostFocus}
+            onKeyPress={this.handleKeyPressed}
+            onChange={this.handleTextInputChanged}
+            autoFocus={true}
+          />);
       }
-      return <span
-        className={todoItemTextClass}
-        onClick={this.handleToDoClicked}>{this.props.todo.task}</span>;
+      return (
+        <span
+          className={todoItemTextClass}
+          onClick={this.handleToDoClicked}
+        >{this.props.todo.task}
+        </span>
+      );
     };
     return (
       <li className="todo-item">
@@ -77,18 +82,10 @@ class ToDoItem extends Component {
           onChange={this.handleCompletedCheckboxChange}
         />
         {editableToDo()}
-        <button className="todo-item__delete" onClick={this.handleRemoveToDo}></button>
+        <button className="todo-item__delete" onClick={this.handleRemoveToDo} />
       </li>
     );
   }
 }
 
-ToDoItem.propTypes = {
-  todo: PropTypes.object,
-  onEditToDo: PropTypes.func,
-  onRemoveToDo: PropTypes.func,
-  onCompleteToDo: PropTypes.func,
-  onUnCompleteToDo: PropTypes.func,
-};
-
-export default ToDoItem;
+export default SortableElement(ToDoItem);
